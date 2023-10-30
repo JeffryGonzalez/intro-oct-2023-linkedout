@@ -9,7 +9,7 @@ import { TodoItem } from "../models";
   standalone: true,
   template: `
     <section>
-      <app-todo-entry />
+      <app-todo-entry (itemAdded)="addItem($event)" />
     </section>
     <section>
       <app-todo-list [todos]="list" />
@@ -26,6 +26,11 @@ export class TodosComponent {
   ];
 
   addItem(description: string) {
-    // todo: add this to the list
+    const newItem: TodoItem = {
+      id: crypto.randomUUID(),
+      description,
+      completed: false,
+    };
+    this.list = [newItem, ...this.list];
   }
 }
