@@ -1,13 +1,21 @@
 import { Component } from "@angular/core";
+import { HeaderComponent } from "./components/header.component";
+import { NavigationComponent } from "./components/navigation.component";
+import { RouterOutlet } from "@angular/router";
 
 @Component({
+  standalone: true,
   selector: "app-root",
   template: `
-    <h2 class="text-3xl">{{ title }}</h2>
-    <p>Two plus two = {{ 2 + 2 }}</p>
+    <div class="container mx-auto">
+      <app-header />
+      <app-navigation />
+      <main>
+        <router-outlet />
+      </main>
+    </div>
   `,
   styles: [],
+  imports: [HeaderComponent, NavigationComponent, RouterOutlet],
 })
-export class AppComponent {
-  title = "Linked Out Starter";
-}
+export class AppComponent {}
