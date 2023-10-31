@@ -1,5 +1,8 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { Store } from "@ngrx/store";
+import { CounterCommands } from "../state/counter.actions";
+import { CounterFeature } from "../state/counter";
 
 @Component({
   selector: "app-counter",
@@ -10,7 +13,7 @@ import { CommonModule } from "@angular/common";
       <button type="button" class="btn btn-primary" (click)="decrement()">
         -
       </button>
-      <span>{{ current }}</span>
+      <span>{{ current() }}</span>
       <button type="button" class="btn btn-primary" (click)="increment()">
         +
       </button>
@@ -19,13 +22,15 @@ import { CommonModule } from "@angular/common";
   styles: [],
 })
 export class CounterComponent {
-  current = 0;
+  current = this.store.selectSignal(CounterFeature.selectCurrent);
+
+  constructor(private readonly store: Store) {}
 
   increment() {
-    this.current++;
+    this.store.dispatch(CounterCommands.incrementTheCount());
   }
 
   decrement() {
-    this.current--;
+    this.store.dispatch(CounterCommands.decrementTheCount());
   }
 }
