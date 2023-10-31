@@ -5,7 +5,27 @@ import { CommonModule } from "@angular/common";
   selector: "app-counter",
   standalone: true,
   imports: [CommonModule],
-  template: ` <p>counter works!</p> `,
+  template: `
+    <div>
+      <button type="button" class="btn btn-primary" (click)="decrement()">
+        -
+      </button>
+      <span>{{ current }}</span>
+      <button type="button" class="btn btn-primary" (click)="increment()">
+        +
+      </button>
+    </div>
+  `,
   styles: [],
 })
-export class CounterComponent {}
+export class CounterComponent {
+  current = 0;
+
+  increment() {
+    this.current++;
+  }
+
+  decrement() {
+    this.current--;
+  }
+}

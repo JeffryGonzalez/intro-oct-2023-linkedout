@@ -9,15 +9,16 @@ import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
   template: `
     <form [formGroup]="form" (ngSubmit)="addItem()">
       <div class="form-control w-full max-w-xs">
-        <label class="label">
+        <label for="description" class="label">
           <span class="label-text">Description?</span>
         </label>
         <input
+          id="description"
           formControlName="description"
           type="text"
           class="input input-bordered w-full max-w-xs"
         />
-        <label class="label">
+        <label for="description" class="label">
           <span class="label-text-alt"
             >What do you want to add to your list?</span
           >
