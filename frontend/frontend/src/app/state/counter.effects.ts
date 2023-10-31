@@ -30,7 +30,9 @@ export class CounterEffects {
         ),
         map(([_, data]) => data), // => data
         mergeMap((data) =>
-          this.client.post("http://localhost:1338/user/counter", data)
+          this.client
+            .post("http://localhost:1338/user/counter", data)
+            .pipe(tap(() => console.log("Sent it to the server")))
         )
       ),
     { dispatch: false }
