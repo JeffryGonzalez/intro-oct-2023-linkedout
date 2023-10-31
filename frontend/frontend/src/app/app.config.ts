@@ -9,8 +9,8 @@ import { CounterFeature } from "./state/counter";
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideStore(reducers),
-    provideState(CounterFeature),
+    provideStore(reducers), // we can inject Store, and sets up an empty application state
+    provideState(CounterFeature), //
     provideStoreDevtools(),
   ],
 };

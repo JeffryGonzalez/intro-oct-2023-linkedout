@@ -18,6 +18,16 @@ import { CounterFeature } from "../state/counter";
         +
       </button>
     </div>
+    <div>
+      <button
+        [disabled]="current() === 0"
+        (click)="reset()"
+        type="button"
+        class="btn btn-warning"
+      >
+        Reset
+      </button>
+    </div>
   `,
   styles: [],
 })
@@ -32,5 +42,9 @@ export class CounterComponent {
 
   decrement() {
     this.store.dispatch(CounterCommands.decrementTheCount());
+  }
+
+  reset() {
+    this.store.dispatch(CounterCommands.resetTheCount());
   }
 }
