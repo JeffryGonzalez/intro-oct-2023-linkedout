@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { map, mergeMap, tap } from "rxjs";
+import { map, switchMap, tap } from "rxjs";
 import { CounterCommands } from "./counter.actions";
 import { CounterFeature } from "./counter";
 import { HttpClient } from "@angular/common/http";
@@ -30,7 +30,7 @@ export class CounterEffects {
           this.store.select(CounterFeature.selectCounterFeatureState)
         ),
         map(([_, data]) => data), // => data
-        mergeMap((data) =>
+        switchMap((data) =>
           this.client
             .post(`${this.baseUrl}user/counter`, data)
             .pipe(tap(() => console.log("Sent it to the server")))

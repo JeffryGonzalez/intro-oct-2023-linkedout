@@ -36,6 +36,7 @@ builder.Services.AddMarten(options =>
 }).UseLightweightSessions();
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 
@@ -51,18 +52,20 @@ if (app.Environment.IsDevelopment())
 
 app.MapPost("/user/counter", async (CounterRequest request,
     IDocumentSession session,
-    UserService user) =>
+    UserService user,
+    CancellationToken token) =>
 {
-    var userId = await user.GetUserId();
+    var userId = await user.GetUserIdAsync(token);
     var doc = new UserCounter(userId, request.Current, request.By);
     session.Store(doc);
-    await session.SaveChangesAsync();
+    await session.SaveChangesAsync(token);
     return Results.Ok(doc);
 }).RequireAuthorization();
 
-app.MapGet("/user/counter", async (IDocumentSession session, UserService user) =>
+app.MapGet("/user/counter", async (IDocumentSession session, UserService user, CancellationToken token) =>
 {
-    var userId = await user.GetUserId();
+
+    var userId = await user.GetUserIdAsync(token);
     var doc = await session.Query<UserCounter>().SingleOrDefaultAsync(u => u.Id == userId);
     if (doc is null)
     {
