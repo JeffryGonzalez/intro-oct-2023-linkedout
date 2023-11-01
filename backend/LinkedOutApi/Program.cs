@@ -50,11 +50,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapGet("/tacos", async (ILogger<Program> logger, CancellationToken token) =>
+app.MapPost("/user/logins", async (UserService userService, CancellationToken token) =>
 {
-    logger.LogInformation("Starting to handle a request");
-    await Task.Delay(3000, token);
-    logger.LogInformation("Done logging the request");
+    await userService.LoginUserAsync(token); // feels like a command!
     return Results.Ok();
 });
 

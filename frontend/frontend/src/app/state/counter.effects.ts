@@ -1,14 +1,50 @@
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { map, switchMap, tap } from "rxjs";
-import { CounterCommands } from "./counter.actions";
-import { CounterFeature } from "./counter";
+import { map, mergeMap, switchMap, tap } from "rxjs";
+import {
+  CounterCommands,
+  CounterDocuments,
+  CounterEvents,
+} from "./counter.actions";
+import { CounterFeature, CounterState } from "./counter";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 @Injectable()
 export class CounterEffects {
   private readonly baseUrl = environment.apiUrl;
+
+  // effect that says "when the counter feature is entered"
+  // "log the user in" - run a command.
+
+  loadCounterData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CounterEvents.userLoggedIn),
+      switchMap(() =>
+        this.client
+          .get<CounterState>(this.baseUrl + "user/counter")
+          .pipe(
+            map((response) =>
+              CounterDocuments.counterState({ payload: response })
+            )
+          )
+      )
+    )
+  );
+
+  logIn$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(CounterEvents.counterFeatureEntered),
+        mergeMap(() =>
+          this.client
+            .post(this.baseUrl + "user/logins", {})
+            .pipe(map(() => CounterEvents.userLoggedIn()))
+        )
+      ),
+    { dispatch: true }
+  );
+
   logIt$ = createEffect(
     () =>
       this.actions$.pipe(
