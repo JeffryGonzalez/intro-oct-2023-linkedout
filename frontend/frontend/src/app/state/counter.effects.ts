@@ -5,9 +5,10 @@ import { map, mergeMap, tap } from "rxjs";
 import { CounterCommands } from "./counter.actions";
 import { CounterFeature } from "./counter";
 import { HttpClient } from "@angular/common/http";
-
+import { environment } from "src/environments/environment";
 @Injectable()
 export class CounterEffects {
+  private readonly baseUrl = environment.apiUrl;
   logIt$ = createEffect(
     () =>
       this.actions$.pipe(
@@ -31,7 +32,7 @@ export class CounterEffects {
         map(([_, data]) => data), // => data
         mergeMap((data) =>
           this.client
-            .post("http://localhost:1338/user/counter", data)
+            .post(`${this.baseUrl}user/counter`, data)
             .pipe(tap(() => console.log("Sent it to the server")))
         )
       ),
