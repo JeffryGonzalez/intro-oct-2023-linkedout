@@ -95,6 +95,7 @@ export class CreateComponent {
     if (this.form.valid) {
       const payload = this.form.value as LinksCreate;
       this.store.dispatch(LinksCommands.addLink(payload));
+      this.form.reset();
     }
   }
 }

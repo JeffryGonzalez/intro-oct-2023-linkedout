@@ -19,4 +19,7 @@ export const LinksFeature = createFeature({
     initialState,
     on(LinksCommands.addLink, (s, a) => adapter.addOne(a.payload, s))
   ),
+  extraSelectors: ({ selectLinksFeatureState }) => ({
+    getAllLinks: adapter.getSelectors(selectLinksFeatureState).selectAll,
+  }),
 });
