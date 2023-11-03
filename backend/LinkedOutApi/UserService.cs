@@ -18,13 +18,13 @@ public class UserService
     // "Query" - Asking it something.
     public async Task<Guid> GetUserIdAsync(CancellationToken token)
     {
-        Claim? sub = GetUserSub();
+        Claim? sub = GetUserSubClaimFromHttpContext();
 
         var user = await _documentSession.Query<User>().SingleAsync(u => u.Sub == sub.Value, token);
         return user.Id;
     }
 
-    private Claim GetUserSub()
+    private Claim GetUserSubClaimFromHttpContext()
     {
         var sub = _contextAccessor.HttpContext?.User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
         if (sub is null)
@@ -38,7 +38,7 @@ public class UserService
     public async Task LoginUserAsync(CancellationToken token)
     {
 
-        Claim? sub = GetUserSub();
+        Claim? sub = GetUserSubClaimFromHttpContext();
 
 
         var user = await _documentSession.Query<User>().SingleOrDefaultAsync(u => u.Sub == sub.Value, token);

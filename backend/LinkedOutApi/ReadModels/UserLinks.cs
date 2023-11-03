@@ -16,10 +16,11 @@ public class UserLinks
     public void Apply(UserDeletedLink @event)
     {
         Version++;
-
+        // Note: I tried the other way and it broke because of see commit
         var linkToDelete = Links.Single(l => l.Id == @event.Id);
         var newLinks = Links.Where(l => l.Id != @event.Id).ToList();
         Links = newLinks;
+        // Todo: Think about this later.
         DeletedLinks.Add(linkToDelete);
     }
 }
